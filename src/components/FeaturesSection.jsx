@@ -1,15 +1,27 @@
     const features = [
     {
         title: "💘 Smart Matching",
-        description: "We help you find someone who gets you."
+        description: "We help you find someone who gets you"
     },
     {
         title: "🛡️ Verified Users",
-        description: "Every profile is real — no catfishing here."
+        description: "Every profile is real NO catfishing here"
     },
     {
-        title: "✨Magic Vibes",
-        description: "Clean design + chill UI to keep things simple."
+        title: "✨ Magic Vibes",
+        description: "Clean design + chill UI to keep things simple"
+    },
+    {
+        title: "💬 Read Receipts",
+        description: "See when your messages are seen (or ignored 😢)"
+    },
+    {
+        title: "📍 Nearby Knights",
+        description: "See who's nearby ready to quest (or grab coffee)"
+    },
+    {
+        title: "🎀 Profile Themes",
+        description: "Customize your profile with fun colors and styles"
     }
     ];
 
