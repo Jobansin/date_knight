@@ -8,6 +8,8 @@ export default {
         extend: {
             animation: {
                 'gradient-flow': 'gradient-flow 5s ease-in-out infinite',
+                'slow-bounce': 'slow-bounce 4s ease-in-out infinite',
+                'slower-bounce': 'slow-bounce 6s ease-in-out infinite',
             },
             keyframes: {
                 'gradient-flow': {
@@ -17,6 +19,14 @@ export default {
                     '50%':{
                         'background-position': '100% 100%',
                     },
+                },
+                'slow-bounce': {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-20px)' },
+                },
+                'slower-bounce': {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-20px)' },
                 },
             },
             fontFamily: {

@@ -14,7 +14,7 @@ const HeroSection = () => {
                     <img
                         src="/src/assets/home.png" 
                         alt="Login Screen"
-                        className="w-72 sm:w-80 lg:w-[400px] max-w-[400px] h-auto rounded-lg shadow-lg "
+                        className="w-72 sm:w-80 lg:w-[400px] max-w-[400px] h-auto rounded-lg shadow-lg animate-slower-bounce"
                     />
                 </div>
             </div>
