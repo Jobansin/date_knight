@@ -1,5 +1,3 @@
-import David from '../assets/David.png';
-import Joban from '../assets/Joban.png';
 import FadeInWhenVisible from "./FadeInWhenVisible";
 const Home = () => {
 return (
@@ -15,12 +13,12 @@ return (
         <div className='relative flex flex-col lg:flex-row justify-center lg:justify-start mt-10 p-6 md:p-16'>
                 <div className='relative w-full lg:w-1/2'>
                     <img
-                        src={David}
+                        src="/David.png"
                         alt="David's Profile"
                         className="w-64 sm:w-72 lg:w-80 h-auto rounded-lg shadow-lg animate-slower-bounce m-6"
                     />
                     <img
-                        src={Joban}
+                        src="/Joban.png"
                         alt="Joban's Profile"
                         className="w-64 sm:w-72 lg:w-80 h-auto rounded-lg shadow-lg z-20 opacity-95 animate-slow-bounce m-6 md:absolute md:top-12 md:left-80 lg:right-96"
                     />
