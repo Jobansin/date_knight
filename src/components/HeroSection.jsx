@@ -1,7 +1,7 @@
 import FadeInWhenVisible from "./FadeInWhenVisible";
 const HeroSection = () => {
     return(
-        <section className="w-full h-screen bg-black text-white flex items-center justify-center relative overflow-hidden px-6">
+        <section id="hero" className="w-full h-screen bg-black text-white flex items-center justify-center relative overflow-hidden px-6">
             <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl">
                 <div className="text-center lg:text-left max-w-xl">
                     <FadeInWhenVisible delay={0.4}>
