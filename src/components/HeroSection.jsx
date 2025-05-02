@@ -1,3 +1,4 @@
+import homeImage from '../assets/home.png';
 import FadeInWhenVisible from "./FadeInWhenVisible";
 const HeroSection = () => {
     return(
@@ -17,7 +18,7 @@ const HeroSection = () => {
                 </div>
                 <div className="mt-10 lg:mt-0">
                     <img
-                        src="/src/assets/home.png" 
+                        src={homeImage}
                         alt="Login Screen"
                         className="w-72 sm:w-80 lg:w-[400px] max-w-[400px] h-auto rounded-lg shadow-lg animate-slower-bounce"
                     />
@@ -30,4 +31,4 @@ const HeroSection = () => {
     );
 };
 
-export default HeroSection;;
+export default HeroSection;
