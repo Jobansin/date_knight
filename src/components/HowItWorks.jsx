@@ -1,5 +1,16 @@
+import { useState, useEffect } from "react";
 import FadeInWhenVisible from "./FadeInWhenVisible";
 const HowItWorks = () => {
+    const [status, setStatus] = useState("idle");
+    useEffect(() => {
+        if (status === "success" || status === "error") {
+            const timeout = setTimeout(() => {
+                setStatus("idle");
+                }, 5000); // clear after 5 seconds
+
+                return () => clearTimeout(timeout); // cleanup if component unmounts
+            }
+        }, [status]);      
         return (
         <section id="how-it-works" className="my-24 flex flex-col items-center px-6">
             <FadeInWhenVisible delay={0.6}>
@@ -45,8 +56,32 @@ const HowItWorks = () => {
     
             {/* early-access form */}
             <form
-            action="https://YOUR_FORM_ENDPOINT"   /* replace with Mailchimp / Loops / Airtable link */
-            method="POST"
+            onSubmit={(e) => {
+                e.preventDefault();
+                const email = e.target.elements.email.value.trim();
+                if (!email.endsWith(".edu")) {
+                    alert("Please use a .edu email address 😾");
+                    return;
+                }
+                setStatus("loading");
+                fetch("https://kzuc6r3vv2.execute-api.us-east-1.amazonaws.com/prod/join", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                    body: JSON.stringify({ email })
+                })
+                .then((res) => res.text())
+                .then((data) => {
+                    console.log("Success:", data);
+                    setStatus("success");
+                    e.target.reset();
+                })
+                .catch((err) => {
+                    console.error("Error:", err);
+                    setStatus("error"); // ← move it here only if there's an actual error
+                });
+            }}
             className="mt-16 w-full max-w-xl flex flex-col sm:flex-row gap-4"
             >
             <input
@@ -58,12 +93,19 @@ const HowItWorks = () => {
             />
             <button
                 type="submit"
-                className="px-6 py-3 rounded-lg bg-pink-300 hover:bg-gradient-to-r from-pink-300 to-blue-400 transition text-white font-semibold shrink-0"
+                disabled={status === "loading"}
+                className="px-6 py-3 rounded-lg bg-pink-300 hover:bg-gradient-to-r from-pink-300 to-blue-400 transition text-white font-semibold shrink-0 disabled:opacity-50"
             >
                 Get Early Access
             </button>
             </form>
             
+            {status === "success" && (
+            <p className="text-green-400 mt-2 text-sm">🎉You’re on the list!</p>
+            )}
+            {status === "error" && (
+            <p className="text-red-400 mt-2 text-sm">❌Something went wrong. Try again!</p>
+            )}
             <p className="text-sm text-neutral-500 mt-3">
             Join numerous students already on the wait-list!
             </p>
