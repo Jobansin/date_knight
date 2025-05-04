@@ -8,6 +8,7 @@ export const handler = async (event) => {
   if (!email) {
     return {
       statusCode: 400,
+      headers: { "Content-Type": "text/plain" },
       body: "Missing email parameter",
     };
   }
@@ -21,6 +22,7 @@ export const handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
+        "Content-Type": "text/html",
         "Access-Control-Allow-Origin": "*"
       },
       body: `<h1 style="text-align:center;">You’ve been unsubscribed from Date Knight 💔</h1>`
