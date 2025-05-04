@@ -1,0 +1,46 @@
+name: CI/CD Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ env.AWS_REGION }}
+
+      - name: Deploy SaveWaitlistEntry Lambda
+        working-directory: lambda/SaveWaitlistEntry
+        run: |
+          npm ci
+          zip -r function.zip .
+          aws lambda update-function-code \
+            --function-name SaveWaitlistEntry \
+            --zip-file fileb://function.zip
+
+      - name: Deploy UnsubscribeHandler Lambda
+        working-directory: lambda/DateKnightUnsubscribeHandler
+        run: |
+          npm ci
+          zip -r function.zip .
+          aws lambda update-function-code \
+            --function-name DateKnightUnsubscribeHandler \
+            --zip-file fileb://function.zip
+
+      - name: Redeploy HTTP API Gateway
+        run: |
+          aws apigatewayv2 create-deployment \
+            --api-id kzuc6r3vv2 \
+            --stage-name prod
