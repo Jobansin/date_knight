@@ -59,27 +59,33 @@ const HowItWorks = () => {
             onSubmit={(e) => {
                 e.preventDefault();
                 const email = e.target.elements.email.value.trim();
+            
                 if (!email.endsWith(".edu")) {
-                    alert("Please use a .edu email address 😾");
-                    return;
+                alert("Please use a .edu email address 😾");
+                return;
                 }
+            
                 setStatus("loading");
+            
                 fetch("https://kzuc6r3vv2.execute-api.us-east-1.amazonaws.com/prod/join", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                    body: JSON.stringify({ email })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
                 })
-                .then((res) => res.text())
-                .then((data) => {
-                    console.log("Success:", data);
+                .then(async (res) => {
+                    const text = await res.text();
+                    if (res.ok) {
+                    console.log("✅ Success:", text);
                     setStatus("success");
                     e.target.reset();
+                    } else {
+                    console.error("❌ Backend error:", text);
+                    setStatus("error");
+                    }
                 })
                 .catch((err) => {
-                    console.error("Error:", err);
-                    setStatus("error"); // ← move it here only if there's an actual error
+                    console.error("❌ Network error:", err);
+                    setStatus("error");
                 });
             }}
             className="mt-16 w-full max-w-xl flex flex-col sm:flex-row gap-4"
