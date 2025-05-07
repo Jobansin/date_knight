@@ -25,17 +25,14 @@ return (
                 </div>
                 <div className='w-full lg:w-1/2 text-left lg:pl-56 lg:pr-36 mt-6 lg:mt-0'>
                 <FadeInWhenVisible delay={0.4}>
-                <h3 className="pt-8 text-3xl font-bold text-white text-center">Why {" "}
+                <h3 className="pt-8 text-4xl font-bold text-white text-center">Why {" "}
                 <span className='bg-gradient-to-r from-pink-300 to-blue-400 text-transparent bg-clip-text'> Date Knight</span>
                 ?</h3>
                 </FadeInWhenVisible>
                 <FadeInWhenVisible delay={0.6}>
-                <p className='pt-16 text-lg text-neutral-400 tracking-widest text-center'>
-                        At Kinsubii, we believe that while college students are constantly navigating the pressures of internships, jobs, and coursework, meaningful connections often take a back seat.
-                        That’s why we created Date Knight — a dating app designed exclusively for students who want something real.
-                        We’ve experienced firsthand how isolating post-college life can be, and we wanted to build something that helps people form genuine relationships before that phase even begins.
-                        Our goal is to craft a space where campus crushes can turn into lasting bonds — without the noise, pressure, or performative swiping. Just real people, making real connections.
-                    </p>
+                <p className='pt-16 text-xl text-neutral-400 tracking-widest text-center'>
+                At Kinsubii, we believe that while college students juggle internships, part‑time jobs, extracurriculars, and demanding coursework, genuine connections often get sidelined—so we built Date Knight, an exclusive .edu‑only app that goes beyond surface‑level swiping. By verifying student emails and matching you based on shared interests, class schedules, and campus involvement, Date Knight creates a safe space for real conversation. Our intuitive icebreaker prompts and curated event suggestions spark genuine interactions, while built‑in privacy controls and real‑time matchmaking let you focus on building lasting bonds. We know how isolating late‑night study sessions can be, so we’ve designed a platform where campus crushes evolve into meaningful relationships—no noise, no pressure, just authentic connections on your own terms.
+                </p>
                 </FadeInWhenVisible>
                 </div>
             </div>

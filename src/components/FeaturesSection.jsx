@@ -49,11 +49,11 @@ return (
                 <div key={index} className="w-full sm:w-1/2 lg:w-1/3 px-4 text-center">
                 <div className="flex justify-center items-center gap-3">
                     <FadeInWhenVisible delay={0.6}>
-                    <h3 className="mt-1 mb-6 text-xl font-semibold">{feature.title}</h3>
+                    <h3 className="mt-1 mb-6 text-2xl font-semibold">{feature.title}</h3>
                     </FadeInWhenVisible>
                 </div>
                     <FadeInWhenVisible delay={0.9}>
-                    <p className="text-md p-2 mt-5 mb-20 text-neutral-400">{feature.description}</p>
+                    <p className="text-lg p-2 mt-5 mb-20 text-neutral-400">{feature.description}</p>
                     </FadeInWhenVisible>
                 </div>
             ))}

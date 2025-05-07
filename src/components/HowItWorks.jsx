@@ -14,7 +14,7 @@ const HowItWorks = () => {
         return (
         <section id="how-it-works" className="my-24 flex flex-col items-center px-6">
             <FadeInWhenVisible delay={0.6}>
-            <h3 className="text-3xl md:text-4xl font-semibold text-center mb-20">
+            <h3 className="text-4xl md:text-4xl font-semibold text-center mb-20">
             How  
             <span className='bg-gradient-to-r from-pink-300 to-blue-400 text-transparent bg-clip-text'> Date Knight </span> 
             Works
