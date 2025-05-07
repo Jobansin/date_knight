@@ -22,7 +22,7 @@ export const handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "text/html",
+        "Content-Type": "text/html; charset=UTF-8",
         "Access-Control-Allow-Origin": "*"
       },
       body: `<h1 style="text-align:center;">You’ve been unsubscribed from Date Knight 💔</h1>`
