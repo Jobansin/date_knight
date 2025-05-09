@@ -22,7 +22,10 @@ export const handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: corsHeaders(),
+      headers: {
+        "Content-Type": "text/html; charset=UTF-8",
+        "Access-Control-Allow-Origin": "*"
+      },
       body: `<h1 style="text-align:center;">💔You’ve been unsubscribed from Date Knight💔</h1>`
     };
   } catch (err) {
@@ -34,9 +37,3 @@ export const handler = async (event) => {
   }
 };
 
-function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin":  "*",
-    "Access-Control-Allow-Headers": "*",
-  };
-}
