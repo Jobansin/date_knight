@@ -4,8 +4,8 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const ses = new SESClient({ region: "us-east-1" });
-const ddb = new DynamoDBClient({ region: "us-east-1" });
+const ses = new SESClient({ region: process.env.AWS_REGION });
+const ddb = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 export const handler = async (event) => {
   const { email } = JSON.parse(event.body || "{}");
@@ -20,7 +20,7 @@ export const handler = async (event) => {
   }
     // 2. Check for duplicates
     const existing = await ddb.send(new GetItemCommand({
-      TableName: "DateKnightWaitlist",
+      TableName: process.env.WAITLIST_TABLE,
       Key: { email: { S: email } }
     }));
   
@@ -34,7 +34,7 @@ export const handler = async (event) => {
     
   // 3. Save email to DynamoDB
   await ddb.send(new PutItemCommand({
-    TableName: "DateKnightWaitlist",
+    TableName: process.env.WAITLIST_TABLE,
     Item: {
       email: { S: email },
       joinedAt: { S: new Date().toISOString() }
@@ -44,7 +44,7 @@ export const handler = async (event) => {
   // 4. Prepare your message payload once
   const msg = {
     to:      email,
-    from:    "hello@kinsubii.com",
+    from:    process.env.SES_SOURCE_EMAIL,
     subject: "You're on the Date Knight early-access list!",
     html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 8px;">
           <h2 style="color: #f9a8d4; text-align: center;">🛡️❤️Welcome to Date Knight❤️🛡️</h2>
@@ -56,7 +56,7 @@ export const handler = async (event) => {
           </div>
           <p style="font-size: 14px; color: #777;">If you didn’t request this, you can safely ignore this email.</p>
           <p style="font-size: 12px; color: #777;">
-          <a href="https://kzuc6r3vv2.execute-api.us-east-1.amazonaws.com/prod/unsubscribe?email=${email}">Unsubscribe</a>
+          <a href="${process.env.BASE_URL}/unsubscribe?email=${email}">Unsubscribe</a>
           </p>
         </div>`,
     text:    "Thanks for signing up to Date Knight. You're on the early-access list!"
@@ -73,7 +73,7 @@ export const handler = async (event) => {
   // 6. Send confirmation email
   if (!sent){
   await ses.send(new SendEmailCommand({
-    Source: "hello@kinsubii.com",
+    Source: process.env.SES_SOURCE_EMAIL,
     Destination: {
       ToAddresses: [email],
     },
@@ -94,7 +94,7 @@ export const handler = async (event) => {
           </div>
           <p style="font-size: 14px; color: #777;">If you didn’t request this, you can safely ignore this email.</p>
           <p style="font-size: 12px; color: #777;">
-          <a href="https://kzuc6r3vv2.execute-api.us-east-1.amazonaws.com/prod/unsubscribe?email=${email}">Unsubscribe</a>
+          <a href="${process.env.BASE_URL}/unsubscribe?email=${email}">Unsubscribe</a>
           </p>
         </div>`,
       Charset: "UTF-8"

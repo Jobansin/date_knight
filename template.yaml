@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: nodejs18.x
+    Environment: { Variables: { WAITLIST_TABLE: !Ref WaitlistTable, SES_SOURCE_EMAIL: hello@kinsubii.com } }
+
+Resources:
+  WaitlistApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowOrigin:  "'https://kinsubii.com, http://localhost:5173'"
+        AllowMethods: "'OPTIONS,POST'"
+        AllowHeaders: "'Content-Type,Authorization'"
+      DefinitionBody:
+        openapi: "3.0.1"
+        paths:
+          /join:
+            post:
+              x-amazon-apigateway-integration:
+                uri: !Sub >-
+                  arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/
+                  ${SaveWaitlistEntryFunction.Arn}/invocations
+                httpMethod: POST
+                type: aws_proxy
+          /unsubscribe:
+            post:
+              x-amazon-apigateway-integration:
+                uri: !Sub >-
+                  arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/
+                  ${UnsubscribeFunction.Arn}/invocations
+                httpMethod: POST
+                type: aws_proxy
+
+  SaveWaitlistEntryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/SaveWaitlistEntry/
+      Handler: index.handler
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref WaitlistTable }
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
+
+  UnsubscribeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/DateKnightUnsubscribeHandler/
+      Handler: index.handler
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref WaitlistTable }
+
+  JoinPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt SaveWaitlistEntryFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WaitlistApi}/*/POST/join
+
+  UnsubscribePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt UnsubscribeFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WaitlistApi}/*/POST/unsubscribe
+
+  WaitlistTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: DateKnightWaitlistv2
+      PrimaryKey: { Name: email, Type: String }
+
+Outputs:
+  JoinUrl:      { Value: !Sub "https://${WaitlistApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/join" }
+  UnsubscribeUrl: { Value: !Sub "https://${WaitlistApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/unsubscribe" }
