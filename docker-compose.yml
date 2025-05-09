@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - AWS_REGION=us-east-1
+      - WAITLIST_TABLE=DateKnightWaitlist
+      - SES_SOURCE_EMAIL=hello@kinsubii.com
+      - BASE_URL=http://localhost:3000
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}

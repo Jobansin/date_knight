@@ -25,4 +25,6 @@ dist-ssr
 
 # AWS SAM build output
 .aws-sam/
+.env
+
 
