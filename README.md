@@ -1,7 +1,6 @@
-````markdown
 # Date Knight
 
-A college-only dating app that helps students form genuine connections before post-college life begins. Powered by:
+A college-only connections app that helps students form genuine connections before post-college life begins. Powered by:
 
 - **Frontend:** React + Vite + Tailwind CSS
 - **Backend Lambdas:** AWS Lambda (Node.js) for waitlist signup and unsubscribe flows
