@@ -1,12 +1,91 @@
-# React + Vite
+````markdown
+# Date Knight
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A college-only dating app that helps students form genuine connections before post-college life begins. Powered by:
 
-Currently, two official plugins are available:
+- **Frontend:** React + Vite + Tailwind CSS
+- **Backend Lambdas:** AWS Lambda (Node.js) for waitlist signup and unsubscribe flows
+- **Database:** AWS DynamoDB
+- **Email:** SendGrid (with fallback to AWS SES)
+- **Local Dev:** Docker & Docker Compose with an Express shim
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js v18+
+- Docker Desktop (macOS/Windows) or Docker Engine (Linux)
+- (Optional) AWS account & IAM credentials for real DynamoDB access
+- SendGrid API key
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Environment Variables
+
+Create a `.env` file at the project root (copy `.env.example`):
+
+```bash
+cp .env.example .env
+# edit .env to insert your real SendGrid key
+````
+
+Contents of `.env`:
+
+```dotenv
+SENDGRID_API_KEY=SG.<your-key-here>
+```
+
+## Local Development
+
+Spin up the full stack (frontend, Lambdas, local DynamoDB) with a single command:
+
+```bash
+docker-compose up --build
+```
+
+* Frontend available at: [http://localhost:3000](http://localhost:3000)
+* POST `/join` and GET `/unsubscribe` endpoints proxied through Express to your Lambda handlers
+
+### Commands Inside the Container
+
+If you need to inspect the container:
+
+```bash
+docker-compose exec app sh
+# Inside: ls -l dist  # verify built files
+```
+
+## Project Structure
+
+```text
+kinsubii/
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+├── package.json
+├── server.js            # Express shim routing to Lambdas
+├── dist/                # Frontend build output
+├── lambda/
+│   ├── SaveWaitlistEntry/
+│   │   └── index.js     # Signup Lambda handler
+│   └── DateKnightUnsubscribeHandler/
+│       └── index.js     # Unsubscribe Lambda handler
+└── src/                 # Frontend source (React + Vite)
+```
+
+## Scripts
+
+```bash
+npm run dev    # starts Vite dev server
+npm run build  # builds frontend into dist/
+npm run serve  # runs server.js locally (Express shim)
+```
+
+## Deployment
+
+On each push to `main`, GitHub Actions will:
+
+1. Build & zip both Lambda functions and update their code via AWS CLI
+2. Redeploy the HTTP API Gateway (apigatewayv2)
+
+Make sure your GitHub secrets include:
+
+* `AWS_ACCESS_KEY_ID`
+* `AWS_SECRET_ACCESS_KEY`
+* `AWS_REGION`
